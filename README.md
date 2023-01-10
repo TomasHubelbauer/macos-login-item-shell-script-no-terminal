@@ -62,3 +62,20 @@ contain any new entries and `ps` will show the infinite loop script is running.
 
 Well, it is not.
 Let's hardcode the username and take the L here.
+
+…And that didn't work either.
+I actually don't know what the problem is with the script at this point, but
+that only helps drive home the point of what I am going to present next, which
+should be much simpler.
+
+Let's replace the startup script with this:
+
+```sh
+screen -d -m /Users/…/Desktop/…/long-running-script.sh -S my-long-running-script
+```
+
+This should make the login item shell script start a default-detached `screen`
+session which will run in the background, but will allow us to drop in on it
+and check its outputs through the Terminal as well as drop back out if we like
+the status.
+Let's see if this works as a login item shell script.

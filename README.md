@@ -36,3 +36,26 @@ done
 We use a full path of the ouput file because we can't be sure what it's relative 
 to.
 We'll find that out as well thanks to the `pwd` line.
+
+So - that didn't work and the script no longer appears even in `ps`.
+Most likely this means the script crashed and chances are the reason why is
+because the shell it is run in doesn't resolve `~` to your user directory the
+same way Terminal does.
+We will need to hardcode this path.
+We can either run `cd ~` followed by `pwd` in Terminal to know what to replace
+`~` with or if we don't want to hardcode the user name into the script, we can
+instead use `/Users/$(whoami)` instead of `~`.
+
+The script now looks like this:
+
+```sh
+while true
+do
+  date -Iseconds >> /Users/$(whoami)/Desktop/login-item-shell-script.log
+  pwd >> /Users/$(whoami)/Desktop/login-item-shell-script.log
+  sleep 1
+done
+```
+
+Let's sign out and back in again and see if `login-item-shell-script.log` will
+contain any new entries and `ps` will show the infinite loop script is running.

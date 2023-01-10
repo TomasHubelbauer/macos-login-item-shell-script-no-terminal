@@ -59,3 +59,6 @@ done
 
 Let's sign out and back in again and see if `login-item-shell-script.log` will
 contain any new entries and `ps` will show the infinite loop script is running.
+
+Well, it is not.
+Let's hardcode the username and take the L here.

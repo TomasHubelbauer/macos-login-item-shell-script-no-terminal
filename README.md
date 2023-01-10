@@ -96,3 +96,64 @@ screen session detached and exit right away.
 screen -d -m /Users/…/Desktop/…/long-running-script.sh -S my-long-running-script
 exit
 ```
+
+Good news!
+This works and while the Terminal window stays open, it shows a detached session
+and an exited process, so it is safe to close.
+I am going to cop out here and say that it is actually good that the window is
+there after logging in to a macOS user session as it at least serves as a
+reminder that the login item shell script is running.
+With the ability to safely close it, this is good enough for me now.
+
+The script runs within `~` so the `.command` script can be updated to take that
+into an account:
+
+```sh
+screen -d -m ./Desktop/…/long-running-script.sh -S my-long-running-script
+exit
+```
+
+And so can the script being called by this launcher command.
+
+The way it works is the following:
+We use the built-in (but ancient version) macOS `screen` command.
+
+- `-d` means to start detached
+- `-m` is the command to run
+- `-S` gives the screen name
+
+This will start a screen session and immediately detach from it.
+We can tell it is running by running `screen -list`.
+
+If that command gives `No Sockets found in /var/folders/pk/…/T/.screen.`, make
+sure you are in the right directory while starting the infinite script.
+It might have already ended by crashing on the incorrect script path.
+
+Unfortunately I don't know how to make `screen -list` show the custom name of
+the session and I suspect the version of `screen` shipping with macOS is too
+old to support printing the session names in `screen -list`.
+`screen -v` gives `Screen version 4.00.03 (FAU) 23-Oct-06`.
+
+One workaround is to use `ps` and `grep` for the custom screen session name:
+
+`ps x | grep "my-long-running-script" | grep SCREEN`
+
+To reconnect to the backgrounded long running process, use `screen -r` with the
+PID found in `screen -list`.
+
+`screen -r $PID` (e.g.: `12345`)
+
+Note that Ctrl+C will kill the screen session so to detach again after attaching
+to interactivity, press Ctrl+a+d (keep holding Ctrl while going from `a` to `d`)
+
+A handy script can be crafted to reconnect based on the screen session name
+combining the two bits of information from above:
+
+```sh
+PID=$(ps x | grep "my-long-running-script" | grep SCREEN | grep -o '[[:digit:]]*' | head -n1)
+screen -r $PID
+```
+
+This is all the information needed to start a login item command which launches
+a screen session with a custom long-running script whose output we can attach to
+and detach back from at any point without affecting its runtime!

@@ -79,3 +79,20 @@ session which will run in the background, but will allow us to drop in on it
 and check its outputs through the Terminal as well as drop back out if we like
 the status.
 Let's see if this works as a login item shell script.
+
+…And again, it didn't work.
+I don't know why it worked the first time but not any later time.
+
+Anyway, there is this thing where you can name the login item file `.command`
+and it will run it in Terminal.
+The upside is that it actually runs the scripts, but the obvious downside is
+that the Terminal is shown with the scripts output and when closed, terminates
+the script.
+
+Let's put the screen call into the `.command` file and see if we can start the
+screen session detached and exit right away.
+
+```sh
+screen -d -m /Users/…/Desktop/…/long-running-script.sh -S my-long-running-script
+exit
+```

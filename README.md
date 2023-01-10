@@ -6,8 +6,8 @@ Let's imagine we want to test a simple infinite-loop shell script like this one:
 ```sh
 while true
 do
-	date -Iseconds
-	sleep 1
+  date -Iseconds
+  sleep 1
 done
 ```
 
@@ -27,9 +27,9 @@ Let's use a script like this:
 ```sh
 while true
 do
-	date -Iseconds >> ~/Desktop/login-item-shell-script.log
+  date -Iseconds >> ~/Desktop/login-item-shell-script.log
   pwd >> ~/Desktop/login-item-shell-script.log
-	sleep 1
+  sleep 1
 done
 ```
 
